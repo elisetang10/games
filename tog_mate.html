@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Who Is Your Throne of Glass Mate?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #78350f 0%, #7f1d1d 50%, #1f2937 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(17, 24, 39, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            padding: 48px;
+            border: 2px solid #d97706;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .crown-icon {
+            width: 80px;
+            height: 80px;
+            color: #fbbf24;
+            margin: 0 auto 24px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: bold;
+            color: #fbbf24;
+            margin-bottom: 16px;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: #d1d5db;
+            margin-bottom: 32px;
+        }
+
+        .mates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .mate-card {
+            padding: 16px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .mate-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .mate-rowan { background: linear-gradient(135deg, #065f46 0%, #047857 100%); }
+        .mate-chaol { background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); }
+        .mate-dorian { background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 100%); }
+        .mate-aedion { background: linear-gradient(135deg, #b45309 0%, #f59e0b 100%); }
+        .mate-lorcan { background: linear-gradient(135deg, #374151 0%, #6b7280 100%); }
+        .mate-fenrys { background: linear-gradient(135deg, #713f12 0%, #a16207 100%); }
+
+        .btn {
+            background: linear-gradient(90deg, #d97706 0%, #dc2626 100%);
+            color: white;
+            font-weight: bold;
+            padding: 16px 32px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background: linear-gradient(90deg, #b45309 0%, #b91c1c 100%);
+            transform: translateY(-2px);
+        }
+
+        .progress-container {
+            margin-bottom: 24px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .progress-text {
+            color: #fbbf24;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: #374151;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f59e0b 0%, #dc2626 100%);
+            transition: width 0.3s ease;
+        }
+
+        .question-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 32px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .option {
+            padding: 24px;
+            border-radius: 8px;
+            border: 2px solid #374151;
+            background: #1f2937;
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .option:hover {
+            border-color: #d97706;
+            background: #2d3748;
+            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+            transform: translateX(4px);
+        }
+
+        .result-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .result-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 64px;
+        }
+
+        .result-title {
+            font-size: 48px;
+            font-weight: bold;
+            color: #fbbf24;
+            margin-bottom: 16px;
+        }
+
+        .result-subtitle {
+            font-size: 24px;
+            color: #f59e0b;
+            margin-bottom: 24px;
+            font-style: italic;
+        }
+
+        .result-description {
+            font-size: 18px;
+            color: #d1d5db;
+            margin-bottom: 24px;
+            line-height: 1.8;
+        }
+
+        .traits {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 32px;
+        }
+
+        .trait {
+            padding: 12px 24px;
+            border-radius: 9999px;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        svg {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        @media (max-width: 640px) {
+            h1 { font-size: 32px; }
+            .question-title { font-size: 24px; }
+            .result-title { font-size: 32px; }
+            .mates-grid { grid-template-columns: repeat(2, 1fr); }
+            .container { padding: 32px 24px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Start Screen -->
+        <div id="start-screen" class="text-center">
+            <svg class="crown-icon" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2L15 8L21 9L16.5 13.5L18 20L12 16.5L6 20L7.5 13.5L3 9L9 8L12 2Z" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            <h1>Who Is Your Throne of Glass Mate?</h1>
+            <p class="subtitle">Discover which character from Erilea is your perfect match</p>
+            
+            <div class="mates-grid">
+                <div class="mate-card mate-rowan">
+                    <span style="font-size: 32px;">🦅</span>
+                    <span>Rowan</span>
+                </div>
+                <div class="mate-card mate-chaol">
+                    <span style="font-size: 32px;">⚔️</span>
+                    <span>Chaol</span>
+                </div>
+                <div class="mate-card mate-dorian">
+                    <span style="font-size: 32px;">👑</span>
+                    <span>Dorian</span>
+                </div>
+                <div class="mate-card mate-aedion">
+                    <span style="font-size: 32px;">🦁</span>
+                    <span>Aedion</span>
+                </div>
+                <div class="mate-card mate-lorcan">
+                    <span style="font-size: 32px;">⚡</span>
+                    <span>Lorcan</span>
+                </div>
+                <div class="mate-card mate-fenrys">
+                    <span style="font-size: 32px;">🐺</span>
+                    <span>Fenrys</span>
+                </div>
+            </div>
+
+            <button class="btn" onclick="startGame()">
+                Find Your Mate
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Question Screen -->
+        <div id="question-screen" class="hidden">
+            <div class="progress-container">
+                <div class="progress-header">
+                    <span class="progress-text" id="progress-text">Question 1 of 8</span>
+                    <span class="progress-text" id="progress-percent">13%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
+
+            <h2 class="question-title text-center" id="question-text"></h2>
+
+            <div class="options" id="options-container"></div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-screen" class="hidden text-center">
+            <div class="result-container">
+                <div class="result-icon" id="result-icon"></div>
+                <h2 class="result-title" id="result-name"></h2>
+                <p class="result-subtitle" id="result-subtitle"></p>
+                <p class="result-description" id="result-description"></p>
+                <div class="traits" id="result-traits"></div>
+                <button class="btn" onclick="restart()">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                    Take Again
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const mates = {
+            rowan: {
+                name: "Rowan Whitethorn",
+                subtitle: "The Fae Warrior Prince",
+                icon: "🦅",
+                color: "mate-rowan",
+                gradient: "linear-gradient(135deg, #065f46 0%, #047857 100%)",
+                description: "Your mate is Rowan! You're drawn to someone loyal, protective, and deeply committed. Like Rowan, your ideal partner is patient, strong, and willing to fight beside you through anything. They see your true worth even when you don't.",
+                traits: ["Loyal", "Protective", "Patient", "Fierce", "Devoted"]
+            },
+            chaol: {
+                name: "Chaol Westfall",
+                subtitle: "The Captain of Honor",
+                icon: "⚔️",
+                color: "mate-chaol",
+                gradient: "linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)",
+                description: "Your mate is Chaol! You're drawn to someone honorable, steadfast, and principled. Like Chaol, your ideal partner values duty and loyalty, but learns to embrace change and growth. They challenge you to be better.",
+                traits: ["Honorable", "Loyal", "Principled", "Growing", "Devoted"]
+            },
+            dorian: {
+                name: "Dorian Havilliard",
+                subtitle: "The King with Magic",
+                icon: "👑",
+                color: "mate-dorian",
+                gradient: "linear-gradient(135deg, #4c1d95 0%, #7c3aed 100%)",
+                description: "Your mate is Dorian! You're drawn to someone charming, intelligent, and complex. Like Dorian, your ideal partner has depth beneath their charisma, values freedom and learning, and isn't afraid of their own power.",
+                traits: ["Charming", "Intelligent", "Magical", "Complex", "Kind"]
+            },
+            aedion: {
+                name: "Aedion Ashryver",
+                subtitle: "The Wolf of the North",
+                icon: "🦁",
+                color: "mate-aedion",
+                gradient: "linear-gradient(135deg, #b45309 0%, #f59e0b 100%)",
+                description: "Your mate is Aedion! You're drawn to someone fiercely loyal, brave, and protective of those they love. Like Aedion, your ideal partner would die for their family, leads with courage, and brings joy even in darkness.",
+                traits: ["Brave", "Loyal", "Protective", "Joyful", "Strong"]
+            },
+            lorcan: {
+                name: "Lorcan Salvaterre",
+                subtitle: "The Dark Warrior",
+                icon: "⚡",
+                color: "mate-lorcan",
+                gradient: "linear-gradient(135deg, #374151 0%, #6b7280 100%)",
+                description: "Your mate is Lorcan! You're drawn to someone powerful, intense, and fiercely dedicated. Like Lorcan, your ideal partner is rough around the edges but capable of deep, transformative love. They're willing to change for the right person.",
+                traits: ["Powerful", "Intense", "Dedicated", "Complex", "Protective"]
+            },
+            fenrys: {
+                name: "Fenrys Moonbeam",
+                subtitle: "The Golden Wolf",
+                icon: "🐺",
+                color: "mate-fenrys",
+                gradient: "linear-gradient(135deg, #713f12 0%, #a16207 100%)",
+                description: "Your mate is Fenrys! You're drawn to someone charming, playful, yet deeply loyal and brave. Like Fenrys, your ideal partner brings light and humor, but has incredible strength beneath. They'll make you laugh and fight beside you.",
+                traits: ["Charming", "Loyal", "Playful", "Brave", "Devoted"]
+            }
+        };
+
+        const questions = [
+            {
+                question: "What quality do you value most in a partner?",
+                options: [
+                    { text: "Unwavering loyalty and patience", mate: "rowan", points: 3 },
+                    { text: "Honor and strong principles", mate: "chaol", points: 3 },
+                    { text: "Intelligence and charm", mate: "dorian", points: 3 },
+                    { text: "Fierce protectiveness", mate: "aedion", points: 3 },
+                    { text: "Raw power and intensity", mate: "lorcan", points: 3 },
+                    { text: "Humor and loyalty", mate: "fenrys", points: 3 }
+                ]
+            },
+            {
+                question: "How would your ideal partner show their love?",
+                options: [
+                    { text: "Through quiet devotion and protection", mate: "rowan", points: 2 },
+                    { text: "By standing by your side with honor", mate: "chaol", points: 2 },
+                    { text: "With thoughtful gestures and words", mate: "dorian", points: 2 },
+                    { text: "By fighting for you without hesitation", mate: "aedion", points: 2 },
+                    { text: "Through fierce dedication", mate: "lorcan", points: 2 },
+                    { text: "By making you laugh in dark times", mate: "fenrys", points: 2 }
+                ]
+            },
+            {
+                question: "What's most important in a relationship?",
+                options: [
+                    { text: "Being true equals and partners", mate: "rowan", points: 3 },
+                    { text: "Mutual respect and growth", mate: "chaol", points: 3 },
+                    { text: "Intellectual connection", mate: "dorian", points: 3 },
+                    { text: "Unconditional loyalty", mate: "aedion", points: 3 },
+                    { text: "Deep, transformative love", mate: "lorcan", points: 3 },
+                    { text: "Joy and unwavering support", mate: "fenrys", points: 3 }
+                ]
+            },
+            {
+                question: "What would you do together?",
+                options: [
+                    { text: "Train and grow stronger together", mate: "rowan", points: 2 },
+                    { text: "Support each other's duties", mate: "chaol", points: 2 },
+                    { text: "Explore libraries and discuss ideas", mate: "dorian", points: 2 },
+                    { text: "Celebrate victories with family", mate: "aedion", points: 2 },
+                    { text: "Face impossible challenges", mate: "lorcan", points: 2 },
+                    { text: "Share adventures and laughter", mate: "fenrys", points: 2 }
+                ]
+            },
+            {
+                question: "What attracts you most?",
+                options: [
+                    { text: "Quiet strength and patience", mate: "rowan", points: 2 },
+                    { text: "Steadfast honor", mate: "chaol", points: 2 },
+                    { text: "Charisma and depth", mate: "dorian", points: 2 },
+                    { text: "Bold courage", mate: "aedion", points: 2 },
+                    { text: "Raw intensity", mate: "lorcan", points: 2 },
+                    { text: "Playful charm", mate: "fenrys", points: 2 }
+                ]
+            },
+            {
+                question: "How should your partner handle conflict?",
+                options: [
+                    { text: "With strategy and calm strength", mate: "rowan", points: 2 },
+                    { text: "With principles and honor", mate: "chaol", points: 2 },
+                    { text: "With intelligence and diplomacy", mate: "dorian", points: 2 },
+                    { text: "By fighting alongside you", mate: "aedion", points: 2 },
+                    { text: "With fierce determination", mate: "lorcan", points: 2 },
+                    { text: "By keeping spirits high", mate: "fenrys", points: 2 }
+                ]
+            },
+            {
+                question: "What nickname would they call you?",
+                options: [
+                    { text: "Something meaningful in their language", mate: "rowan", points: 2 },
+                    { text: "A term of respect", mate: "chaol", points: 2 },
+                    { text: "Something clever and endearing", mate: "dorian", points: 2 },
+                    { text: "A fierce warrior name", mate: "aedion", points: 2 },
+                    { text: "They'd show it through actions, not words", mate: "lorcan", points: 2 },
+                    { text: "Something playful and teasing", mate: "fenrys", points: 2 }
+                ]
+            },
+            {
+                question: "What would make you fall for them?",
+                options: [
+                    { text: "Seeing their unwavering devotion", mate: "rowan", points: 3 },
+                    { text: "Watching them grow and change", mate: "chaol", points: 3 },
+                    { text: "Their complexity and intelligence", mate: "dorian", points: 3 },
+                    { text: "Their fierce love for family", mate: "aedion", points: 3 },
+                    { text: "Seeing their vulnerable side", mate: "lorcan", points: 3 },
+                    { text: "Their ability to bring joy", mate: "fenrys", points: 3 }
+                ]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let mateScores = {
+            rowan: 0,
+            chaol: 0,
+            dorian: 0,
+            aedion: 0,
+            lorcan: 0,
+            fenrys: 0
+        };
+
+        function startGame() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('question-screen').classList.remove('hidden');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const question = questions[currentQuestion];
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+
+            document.getElementById('progress-text').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+            document.getElementById('progress-percent').textContent = `${Math.round(progress)}%`;
+            document.getElementById('progress-fill').style.width = `${progress}%`;
+            document.getElementById('question-text').textContent = question.question;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            question.options.forEach((option) => {
+                const btn = document.createElement('button');
+                btn.className = 'option';
+                btn.textContent = option.text;
+                btn.onclick = () => handleAnswer(option.mate, option.points);
+                container.appendChild(btn);
+            });
+        }
+
+        function handleAnswer(mate, points) {
+            mateScores[mate] += points;
+
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            const highestMate = Object.keys(mateScores).reduce((a, b) => 
+                mateScores[a] > mateScores[b] ? a : b
+            );
+            const result = mates[highestMate];
+
+            document.getElementById('question-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+
+            const iconDiv = document.getElementById('result-icon');
+            iconDiv.style.background = result.gradient;
+            iconDiv.textContent = result.icon;
+
+            document.getElementById('result-name').textContent = result.name;
+            document.getElementById('result-subtitle').textContent = result.subtitle;
+            document.getElementById('result-description').textContent = result.description;
+
+            const traitsContainer = document.getElementById('result-traits');
+            traitsContainer.innerHTML = '';
+            result.traits.forEach(trait => {
+                const span = document.createElement('span');
+                span.className = `trait ${result.color}`;
+                span.textContent = trait;
+                traitsContainer.appendChild(span);
+            });
+        }
+
+        function restart() {
+            currentQuestion = 0;
+            mateScores = {
+                rowan: 0,
+                chaol: 0,
+                dorian: 0,
+                aedion: 0,
+                lorcan: 0,
+                fenrys: 0
+            };
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('start-screen').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
