@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fourth Wing Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #581c87 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dragon-background {
+            position: absolute;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .dragon-1 { top: 80px; right: 80px; width: 224px; height: 112px; }
+        .dragon-2 { bottom: 80px; left: 80px; width: 224px; height: 112px; }
+        .dragon-3 { top: 50%; left: 40px; width: 160px; height: 80px; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.15; }
+            50% { opacity: 0.25; }
+        }
+
+        .dragon-result {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .dragon-result-1 { animation-delay: 0s; }
+        .dragon-result-2 { animation-delay: 1s; }
+        .dragon-result-3 { animation-delay: 0.5s; }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            padding: 40px;
+            border: 2px solid #3b82f6;
+            position: relative;
+            z-index: 10;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .title-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .flame-icon {
+            width: 40px;
+            height: 40px;
+            color: #60a5fa;
+        }
+
+        h1 {
+            color: #93c5fd;
+            font-size: 32px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .subtitle {
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        .question-counter {
+            color: #93c5fd;
+            font-weight: 600;
+            font-size: 16px;
+            text-align: right;
+        }
+
+        .counter-label {
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #334155;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6 0%, #a855f7 100%);
+            transition: width 0.3s ease;
+            position: relative;
+        }
+
+        .question {
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .option {
+            padding: 16px;
+            border-radius: 8px;
+            border: 2px solid #334155;
+            background: #1e293b;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .option:hover:not(.correct):not(.incorrect):not(.disabled) {
+            border-color: #3b82f6;
+            background: #2d3748;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        .option.correct {
+            background: #064e3b;
+            border-color: #10b981;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .option.incorrect {
+            background: #7f1d1d;
+            border-color: #ef4444;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        .option.disabled {
+            cursor: not-allowed;
+            color: #6b7280;
+        }
+
+        .checkmark {
+            color: #6ee7b7;
+        }
+
+        .xmark {
+            color: #fca5a5;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 24px;
+            border-top: 2px solid #334155;
+        }
+
+        .score {
+            color: #93c5fd;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn {
+            background: linear-gradient(90deg, #2563eb 0%, #9333ea 100%);
+            color: white;
+            font-weight: bold;
+            padding: 12px 32px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:hover {
+            background: linear-gradient(90deg, #1d4ed8 0%, #7e22ce 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        .result-container {
+            text-align: center;
+        }
+
+        .trophy-icon {
+            width: 80px;
+            height: 80px;
+            color: #eab308;
+            margin: 0 auto 30px;
+        }
+
+        .result-title {
+            font-size: 48px;
+            font-weight: bold;
+            color: #93c5fd;
+            margin-bottom: 20px;
+        }
+
+        .result-score {
+            font-size: 72px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .result-message {
+            font-size: 24px;
+            color: #d1d5db;
+            margin-bottom: 40px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        svg {
+            display: inline-block;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Dragons -->
+    <svg class="dragon-background dragon-1" viewBox="0 0 400 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M160 140 Q120 145 80 155 Q60 160 40 170" stroke="#d97706" stroke-width="10" stroke-linecap="round" opacity="0.6"/>
+        <ellipse cx="200" cy="130" rx="50" ry="35" fill="#d97706" opacity="0.7"/>
+        <path d="M235 120 Q260 110 280 100" stroke="#d97706" stroke-width="22" stroke-linecap="round" opacity="0.7"/>
+        <ellipse cx="290" cy="95" rx="20" ry="18" fill="#d97706" opacity="0.8"/>
+        <path d="M290 105 Q305 108 310 102 Q306 98 290 97" fill="#d97706" opacity="0.8"/>
+        <ellipse cx="295" cy="92" rx="4" ry="5" fill="#ef4444"/>
+        <path d="M285 82 L280 70 L288 80 Z" fill="#d97706" opacity="0.8"/>
+        <path d="M180 125 Q100 90 40 110 Q35 135 65 145 Q120 140 170 130 Z" fill="#d97706" opacity="0.4" stroke="#d97706" stroke-width="3"/>
+        <path d="M220 125 Q300 90 360 110 Q365 135 335 145 Q280 140 230 130 Z" fill="#d97706" opacity="0.4" stroke="#d97706" stroke-width="3"/>
+    </svg>
+
+    <svg class="dragon-background dragon-2" viewBox="0 0 400 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M160 140 Q120 145 80 155 Q60 160 40 170" stroke="#f59e0b" stroke-width="10" stroke-linecap="round" opacity="0.6"/>
+        <ellipse cx="200" cy="130" rx="50" ry="35" fill="#f59e0b" opacity="0.7"/>
+        <path d="M235 120 Q260 110 280 100" stroke="#f59e0b" stroke-width="22" stroke-linecap="round" opacity="0.7"/>
+        <ellipse cx="290" cy="95" rx="20" ry="18" fill="#f59e0b" opacity="0.8"/>
+        <path d="M290 105 Q305 108 310 102 Q306 98 290 97" fill="#f59e0b" opacity="0.8"/>
+        <ellipse cx="295" cy="92" rx="4" ry="5" fill="#ef4444"/>
+        <path d="M285 82 L280 70 L288 80 Z" fill="#f59e0b" opacity="0.8"/>
+        <path d="M180 125 Q100 90 40 110 Q35 135 65 145 Q120 140 170 130 Z" fill="#f59e0b" opacity="0.4" stroke="#f59e0b" stroke-width="3"/>
+        <path d="M220 125 Q300 90 360 110 Q365 135 335 145 Q280 140 230 130 Z" fill="#f59e0b" opacity="0.4" stroke="#f59e0b" stroke-width="3"/>
+    </svg>
+
+    <svg class="dragon-background dragon-3" viewBox="0 0 400 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M160 140 Q120 145 80 155 Q60 160 40 170" stroke="#b45309" stroke-width="10" stroke-linecap="round" opacity="0.6"/>
+        <ellipse cx="200" cy="130" rx="50" ry="35" fill="#b45309" opacity="0.7"/>
+        <path d="M235 120 Q260 110 280 100" stroke="#b45309" stroke-width="22" stroke-linecap="round" opacity="0.7"/>
+        <ellipse cx="290" cy="95" rx="20" ry="18" fill="#b45309" opacity="0.8"/>
+        <path d="M290 105 Q305 108 310 102 Q306 98 290 97" fill="#b45309" opacity="0.8"/>
+        <ellipse cx="295" cy="92" rx="4" ry="5" fill="#ef4444"/>
+        <path d="M285 82 L280 70 L288 80 Z" fill="#b45309" opacity="0.8"/>
+        <path d="M180 125 Q100 90 40 110 Q35 135 65 145 Q120 140 170 130 Z" fill="#b45309" opacity="0.4" stroke="#b45309" stroke-width="3"/>
+        <path d="M220 125 Q300 90 360 110 Q365 135 335 145 Q280 140 230 130 Z" fill="#b45309" opacity="0.4" stroke="#b45309" stroke-width="3"/>
+    </svg>
+
+    <div class="container">
+        <div id="quiz-screen">
+            <div class="header">
+                <div class="title-section">
+                    <svg class="flame-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"></path>
+                    </svg>
+                    <div>
+                        <h1>Fourth Wing Quiz</h1>
+                        <div class="subtitle">Test your dragon rider knowledge</div>
+                    </div>
+                </div>
+                <div class="question-counter">
+                    <div class="counter-label">Question</div>
+                    <div id="questionCounter">1 / 10</div>
+                </div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <div class="question" id="question"></div>
+
+            <div class="options" id="options"></div>
+
+            <div class="footer hidden" id="footer">
+                <div class="score">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"></path>
+                    </svg>
+                    <span id="scoreDisplay">Score: 0 / 0</span>
+                </div>
+                <button class="btn" id="nextBtn">Next Question →</button>
+            </div>
+        </div>
+
+        <div id="result-screen" class="hidden">
+            <div class="result-container">
+                <svg class="trophy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                </svg>
+                <h2 class="result-title">Threshing Complete!</h2>
+                <div class="result-score" id="finalScore">0 / 10</div>
+                <p class="result-message" id="resultMessage"></p>
+                <button class="btn" id="restartBtn">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: inline; margin-right: 8px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                    Try Again
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quizQuestions = [
+            {
+                question: "What is the name of Violet's first dragon?",
+                options: ["Tairn", "Sgaeyl", "Andarna", "Codagh"],
+                correct: 0
+            },
+            {
+                question: "What color is Tairn?",
+                options: ["Red", "Black", "Golden", "Blue"],
+                correct: 1
+            },
+            {
+                question: "Who is Xaden Riorson's dragon?",
+                options: ["Tairn", "Sgaeyl", "Andarna", "Chradh"],
+                correct: 1
+            },
+            {
+                question: "What is Violet's signet power?",
+                options: ["Ice wielding", "Lightning wielding", "Fire wielding", "Mind reading"],
+                correct: 1
+            },
+            {
+                question: "What quadrant does Violet join at Basgiath War College?",
+                options: ["Healer Quadrant", "Scribe Quadrant", "Rider Quadrant", "Infantry Quadrant"],
+                correct: 2
+            },
+            {
+                question: "Who is Violet's best friend?",
+                options: ["Rhiannon", "Dain", "Ridoc", "Sawyer"],
+                correct: 0
+            },
+            {
+                question: "What is special about Andarna?",
+                options: ["She's the largest dragon", "She's a feathertail", "She's golden", "Both B and C"],
+                correct: 3
+            },
+            {
+                question: "What is Xaden's signet power?",
+                options: ["Fire", "Ice", "Shadows", "Lightning"],
+                correct: 2
+            },
+            {
+                question: "Who is the Commandant of Basgiath War College?",
+                options: ["General Sorrengail", "Colonel Aetos", "General Melgren", "Lilith Sorrengail"],
+                correct: 3
+            },
+            {
+                question: "What marked the children of the rebellion?",
+                options: ["Scars", "Tattoos", "Rebellion relics", "Dragon marks"],
+                correct: 2
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+
+        function updateDragonsForResult() {
+            const dragons = document.querySelectorAll('.dragon-background');
+            dragons.forEach((dragon, index) => {
+                dragon.classList.add('dragon-result');
+                if (index === 0) dragon.classList.add('dragon-result-1');
+                if (index === 1) dragon.classList.add('dragon-result-2');
+                if (index === 2) dragon.classList.add('dragon-result-3');
+            });
+        }
+
+        function removeDragonAnimations() {
+            const dragons = document.querySelectorAll('.dragon-background');
+            dragons.forEach(dragon => {
+                dragon.classList.remove('dragon-result', 'dragon-result-1', 'dragon-result-2', 'dragon-result-3');
+            });
+        }
+
+        function loadQuestion() {
+            const q = quizQuestions[currentQuestion];
+            document.getElementById('question').textContent = q.question;
+            document.getElementById('questionCounter').textContent = `${currentQuestion + 1} / ${quizQuestions.length}`;
+            document.getElementById('progressFill').style.width = `${((currentQuestion + 1) / quizQuestions.length) * 100}%`;
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            q.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option';
+                btn.innerHTML = `<span>${option}</span>`;
+                btn.onclick = () => selectAnswer(index);
+                optionsContainer.appendChild(btn);
+            });
+
+            document.getElementById('footer').classList.add('hidden');
+            answered = false;
+        }
+
+        function selectAnswer(index) {
+            if (answered) return;
+            answered = true;
+
+            const q = quizQuestions[currentQuestion];
+            const options = document.querySelectorAll('.option');
+            
+            options.forEach((opt, i) => {
+                opt.classList.add('disabled');
+                if (i === q.correct) {
+                    opt.classList.add('correct');
+                    opt.innerHTML = `<span>${q.options[i]}</span><span class="checkmark">✓</span>`;
+                } else if (i === index) {
+                    opt.classList.add('incorrect');
+                    opt.innerHTML = `<span>${q.options[i]}</span><span class="xmark">✗</span>`;
+                }
+            });
+
+            if (index === q.correct) {
+                score++;
+            }
+
+            document.getElementById('scoreDisplay').textContent = `Score: ${score} / ${currentQuestion + 1}`;
+            document.getElementById('footer').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < quizQuestions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+            document.getElementById('finalScore').textContent = `${score} / ${quizQuestions.length}`;
+            
+            updateDragonsForResult();
+            
+            const percentage = (score / quizQuestions.length) * 100;
+            let message = '';
+            
+            if (percentage === 100) message = "🐉 You're worthy of bonding with Tairn! Perfect score!";
+            else if (percentage >= 80) message = "⚡ Outstanding! You'd survive the Gauntlet!";
+            else if (percentage >= 60) message = "🔥 Well done! You know your dragons!";
+            else if (percentage >= 40) message = "📚 Not bad, but you might want to reread!";
+            else message = "💀 You might not survive Threshing... Time for a reread!";
+            
+            document.getElementById('resultMessage').textContent = message;
+        }
+
+        function restart() {
+            currentQuestion = 0;
+            score = 0;
+            answered = false;
+            removeDragonAnimations();
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            document.getElementById('result-screen').classList.add('hidden');
+            loadQuestion();
+        }
+
+        document.getElementById('nextBtn').onclick = nextQuestion;
+        document.getElementById('restartBtn').onclick = restart;
+
+        loadQuestion();
+    </script>
+</body>
+</html>
