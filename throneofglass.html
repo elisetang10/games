@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Throne of Glass Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #78350f 0%, #7f1d1d 50%, #1f2937 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(17, 24, 39, 0.9);
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            padding: 40px;
+            border: 2px solid #d97706;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .title-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        h1 {
+            color: #fbbf24;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .sword-icon {
+            width: 32px;
+            height: 32px;
+            color: #f59e0b;
+        }
+
+        .question-counter {
+            color: #fcd34d;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #374151;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f59e0b 0%, #dc2626 100%);
+            transition: width 0.3s ease;
+        }
+
+        .question {
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .option {
+            padding: 16px;
+            border-radius: 8px;
+            border: 2px solid #374151;
+            background: #1f2937;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .option:hover:not(.correct):not(.incorrect):not(.disabled) {
+            border-color: #f59e0b;
+            background: #2d3748;
+        }
+
+        .option.correct {
+            background: #065f46;
+            border-color: #10b981;
+        }
+
+        .option.incorrect {
+            background: #7f1d1d;
+            border-color: #ef4444;
+        }
+
+        .option.disabled {
+            cursor: not-allowed;
+            color: #6b7280;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .score {
+            color: #fcd34d;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .btn {
+            background: linear-gradient(90deg, #d97706 0%, #dc2626 100%);
+            color: white;
+            font-weight: bold;
+            padding: 12px 32px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: linear-gradient(90deg, #b45309 0%, #b91c1c 100%);
+            transform: translateY(-2px);
+        }
+
+        .result-container {
+            text-align: center;
+        }
+
+        .trophy-icon {
+            width: 80px;
+            height: 80px;
+            color: #f59e0b;
+            margin: 0 auto 30px;
+        }
+
+        .result-title {
+            font-size: 48px;
+            font-weight: bold;
+            color: #fbbf24;
+            margin-bottom: 20px;
+        }
+
+        .result-score {
+            font-size: 72px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .result-message {
+            font-size: 24px;
+            color: #d1d5db;
+            margin-bottom: 40px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        svg {
+            display: inline-block;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="quiz-screen">
+            <div class="header">
+                <div class="title-section">
+                    <svg class="sword-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5l7 7-7 7M5 5l7 7-7 7"></path>
+                    </svg>
+                    <h1>Throne of Glass Quiz</h1>
+                </div>
+                <div class="question-counter" id="questionCounter">Question 1 / 10</div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <div class="question" id="question"></div>
+
+            <div class="options" id="options"></div>
+
+            <div class="footer hidden" id="footer">
+                <div class="score" id="scoreDisplay">Score: 0 / 0</div>
+                <button class="btn" id="nextBtn">Next Question</button>
+            </div>
+        </div>
+
+        <div id="result-screen" class="hidden">
+            <div class="result-container">
+                <svg class="trophy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                </svg>
+                <h2 class="result-title">Quest Complete!</h2>
+                <div class="result-score" id="finalScore">0 / 10</div>
+                <p class="result-message" id="resultMessage"></p>
+                <button class="btn" id="restartBtn">Try Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quizQuestions = [
+            {
+                question: "What is Celaena Sardothien's real name?",
+                options: ["Aelin Ashryver Galathynius", "Elide Lochan", "Lysandra", "Manon Blackbeak"],
+                correct: 0
+            },
+            {
+                question: "Who is the Captain of the Royal Guard?",
+                options: ["Dorian Havilliard", "Chaol Westfall", "Rowan Whitethorn", "Aedion Ashryver"],
+                correct: 1
+            },
+            {
+                question: "What kingdom does Aelin belong to?",
+                options: ["Adarlan", "Wendlyn", "Terrasen", "Eyllwe"],
+                correct: 2
+            },
+            {
+                question: "What type of Fae is Rowan Whitethorn?",
+                options: ["Fire wielder", "Ice wielder", "Wind wielder", "Water wielder"],
+                correct: 2
+            },
+            {
+                question: "Who trained Celaena as an assassin?",
+                options: ["Sam Cortland", "Arobynn Hamel", "Wesley", "Ben"],
+                correct: 1
+            },
+            {
+                question: "What is the name of Aelin's fire-breathing wyvern?",
+                options: ["Abraxos", "Fleetfoot", "Goldryn", "She doesn't have a wyvern"],
+                correct: 3
+            },
+            {
+                question: "Which witch clan raised Manon?",
+                options: ["Yellowlegs", "Blueblood", "Blackbeak", "Crochan"],
+                correct: 2
+            },
+            {
+                question: "What is the name of Aelin's dog companion?",
+                options: ["Abraxos", "Fleetfoot", "Evangeline", "Lysandra"],
+                correct: 1
+            },
+            {
+                question: "Who is Dorian's best friend?",
+                options: ["Chaol Westfall", "Aedion Ashryver", "Ren Allsbrook", "Sorscha"],
+                correct: 0
+            },
+            {
+                question: "What magical ability does Dorian possess?",
+                options: ["Fire magic", "Raw magic", "Healing", "Shapeshifting"],
+                correct: 1
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+
+        function loadQuestion() {
+            const q = quizQuestions[currentQuestion];
+            document.getElementById('question').textContent = q.question;
+            document.getElementById('questionCounter').textContent = `Question ${currentQuestion + 1} / ${quizQuestions.length}`;
+            document.getElementById('progressFill').style.width = `${((currentQuestion + 1) / quizQuestions.length) * 100}%`;
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            q.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option';
+                btn.textContent = option;
+                btn.onclick = () => selectAnswer(index);
+                optionsContainer.appendChild(btn);
+            });
+
+            document.getElementById('footer').classList.add('hidden');
+            answered = false;
+        }
+
+        function selectAnswer(index) {
+            if (answered) return;
+            answered = true;
+
+            const q = quizQuestions[currentQuestion];
+            const options = document.querySelectorAll('.option');
+            
+            options.forEach((opt, i) => {
+                opt.classList.add('disabled');
+                if (i === q.correct) {
+                    opt.classList.add('correct');
+                    opt.textContent += ' ✓';
+                } else if (i === index) {
+                    opt.classList.add('incorrect');
+                    opt.textContent += ' ✗';
+                }
+            });
+
+            if (index === q.correct) {
+                score++;
+            }
+
+            document.getElementById('scoreDisplay').textContent = `Score: ${score} / ${currentQuestion + 1}`;
+            document.getElementById('footer').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < quizQuestions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+            document.getElementById('finalScore').textContent = `${score} / ${quizQuestions.length}`;
+            
+            const percentage = (score / quizQuestions.length) * 100;
+            let message = '';
+            
+            if (percentage === 100) message = "🔥 Aelin would be proud! You're a true Throne of Glass expert!";
+            else if (percentage >= 80) message = "⚔️ Impressive! You know your way around Erilea!";
+            else if (percentage >= 60) message = "📚 Not bad! You've been paying attention!";
+            else if (percentage >= 40) message = "🗡️ You know some things, but might need a reread!";
+            else message = "📖 Time to revisit the series!";
+            
+            document.getElementById('resultMessage').textContent = message;
+        }
+
+        function restart() {
+            currentQuestion = 0;
+            score = 0;
+            answered = false;
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            document.getElementById('result-screen').classList.add('hidden');
+            loadQuestion();
+        }
+
+        document.getElementById('nextBtn').onclick = nextQuestion;
+        document.getElementById('restartBtn').onclick = restart;
+
+        loadQuestion();
+    </script>
+</body>
+</html>
