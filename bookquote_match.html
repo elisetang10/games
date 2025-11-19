@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match Book Quotes to Characters</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(17, 24, 39, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+            padding: 48px;
+            border: 3px solid #8b5cf6;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .book-icon {
+            width: 80px;
+            height: 80px;
+            color: #a78bfa;
+            margin: 0 auto 24px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: bold;
+            color: #c4b5fd;
+            margin-bottom: 16px;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: #d1d5db;
+            margin-bottom: 32px;
+        }
+
+        .series-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .series-card {
+            padding: 20px;
+            border-radius: 12px;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .series-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .series-card.selected {
+            border-color: #a78bfa;
+            box-shadow: 0 0 20px rgba(167, 139, 250, 0.4);
+        }
+
+        .series-acotar {
+            background: linear-gradient(135deg, #581c87 0%, #7e22ce 100%);
+        }
+
+        .series-tog {
+            background: linear-gradient(135deg, #78350f 0%, #b45309 100%);
+        }
+
+        .series-hp {
+            background: linear-gradient(135deg, #7f1d1d 0%, #dc2626 100%);
+        }
+
+        .series-pjo {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+        }
+
+        .series-hg {
+            background: linear-gradient(135deg, #374151 0%, #6b7280 100%);
+        }
+
+        .series-fw {
+            background: linear-gradient(135deg, #0c4a6e 0%, #0369a1 100%);
+        }
+
+        .series-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            margin-top: 8px;
+        }
+
+        .btn {
+            background: linear-gradient(90deg, #7c3aed 0%, #a855f7 100%);
+            color: white;
+            font-weight: bold;
+            padding: 16px 32px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background: linear-gradient(90deg, #6d28d9 0%, #9333ea 100%);
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+        }
+
+        .score {
+            font-size: 24px;
+            font-weight: bold;
+            color: #a78bfa;
+        }
+
+        .quote-card {
+            background: rgba(30, 27, 75, 0.6);
+            border: 2px solid #6d28d9;
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .quote-text {
+            font-size: 22px;
+            color: #e0e7ff;
+            font-style: italic;
+            line-height: 1.8;
+            margin-bottom: 8px;
+        }
+
+        .quote-context {
+            font-size: 14px;
+            color: #a78bfa;
+            margin-top: 16px;
+        }
+
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .character-btn {
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #374151;
+            background: #1f2937;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .character-btn:hover {
+            border-color: #8b5cf6;
+            background: #374151;
+            transform: scale(1.05);
+        }
+
+        .character-btn.correct {
+            background: #065f46;
+            border-color: #10b981;
+            animation: correctPulse 0.5s ease;
+        }
+
+        .character-btn.incorrect {
+            background: #7f1d1d;
+            border-color: #ef4444;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .result-box {
+            padding: 32px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .result-victory {
+            background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+        }
+
+        .result-title {
+            font-size: 42px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .result-text {
+            font-size: 20px;
+            color: #d1fae5;
+            margin-bottom: 16px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        svg {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+        }
+
+        @media (max-width: 640px) {
+            h1 { font-size: 32px; }
+            .container { padding: 32px 20px; }
+            .series-grid { grid-template-columns: 1fr; }
+            .quote-text { font-size: 18px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Selection Screen -->
+        <div id="selection-screen" class="text-center">
+            <svg class="book-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+            </svg>
+            <h1>Match Quotes to Characters</h1>
+            <p class="subtitle">Select the book series you want to play with</p>
+
+            <div class="series-grid">
+                <div class="series-card series-acotar" onclick="toggleSeries('acotar')">
+                    <span style="font-size: 48px;">🌙</span>
+                    <div class="series-name">ACOTAR</div>
+                </div>
+                <div class="series-card series-tog" onclick="toggleSeries('tog')">
+                    <span style="font-size: 48px;">👑</span>
+                    <div class="series-name">Throne of Glass</div>
+                </div>
+                <div class="series-card series-hp" onclick="toggleSeries('hp')">
+                    <span style="font-size: 48px;">⚡</span>
+                    <div class="series-name">Harry Potter</div>
+                </div>
+                <div class="series-card series-pjo" onclick="toggleSeries('pjo')">
+                    <span style="font-size: 48px;">🔱</span>
+                    <div class="series-name">Percy Jackson</div>
+                </div>
+                <div class="series-card series-hg" onclick="toggleSeries('hg')">
+                    <span style="font-size: 48px;">🔥</span>
+                    <div class="series-name">Hunger Games</div>
+                </div>
+                <div class="series-card series-fw" onclick="toggleSeries('fw')">
+                    <span style="font-size: 48px;">🐉</span>
+                    <div class="series-name">Fourth Wing</div>
+                </div>
+            </div>
+
+            <button class="btn" id="start-btn" onclick="startGame()" disabled>
+                Start Game
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="hidden">
+            <div class="game-header">
+                <div>
+                    <div style="color: #9ca3af; font-size: 14px;">Round</div>
+                    <div class="score" id="round">1 / 10</div>
+                </div>
+                <div>
+                    <div style="color: #9ca3af; font-size: 14px;">Score</div>
+                    <div class="score" id="score">0</div>
+                </div>
+            </div>
+
+            <div class="quote-card">
+                <div class="quote-text" id="quote-text"></div>
+                <div class="quote-context" id="quote-context"></div>
+            </div>
+
+            <div class="characters-grid" id="characters-container"></div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-screen" class="hidden text-center">
+            <div class="result-box result-victory">
+                <div class="result-title">🎉 Game Complete! 🎉</div>
+                <div class="result-text">You scored <span id="final-score"></span> out of 10!</div>
+                <div class="result-text" id="result-message"></div>
+            </div>
+            <button class="btn" onclick="restart()">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+                Play Again
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let selectedSeries = new Set();
+        let gameQuotes = [];
+        let currentRound = 0;
+        let score = 0;
+        let answered = false;
+
+        // Quote database - paraphrased thematic quotes
+        const quotes = {
+            acotar: [
+                { quote: "To the stars who listen and the dreams that are answered", character: "Rhysand", context: "ACOTAR series" },
+                { quote: "I was not a pet, not a doll, not an animal. I was a survivor.", character: "Feyre", context: "ACOTAR" },
+                { quote: "Be glad of your human heart. Pity those who don't feel anything at all.", character: "Cassian", context: "ACOTAR series" },
+                { quote: "I would have waited five hundred more years for you.", character: "Rhysand", context: "ACOMAF" },
+                { quote: "You bow to no one.", character: "Mor", context: "ACOTAR series" }
+            ],
+            tog: [
+                { quote: "My name is Celaena Sardothien, and I will not be afraid.", character: "Aelin", context: "Throne of Glass" },
+                { quote: "You could rattle the stars if only you dared.", character: "Rowan", context: "Empire of Storms" },
+                { quote: "Libraries were full of ideas - perhaps the most dangerous things of all.", character: "Aelin", context: "Throne of Glass" },
+                { quote: "I claim you. I want you.", character: "Rowan", context: "Queen of Shadows" },
+                { quote: "The world will be saved and remade by dreamers.", character: "Dorian", context: "Kingdom of Ash" }
+            ],
+            hp: [
+                { quote: "It takes courage to stand up to enemies, but more to stand up to friends.", character: "Dumbledore", context: "Harry Potter" },
+                { quote: "After all this time? Always.", character: "Snape", context: "Deathly Hallows" },
+                { quote: "Words are our most powerful magic.", character: "Dumbledore", context: "Harry Potter" },
+                { quote: "Don't let the muggles get you down.", character: "Ron", context: "Prisoner of Azkaban" },
+                { quote: "We must choose between what is right and what is easy.", character: "Dumbledore", context: "Goblet of Fire" }
+            ],
+            pjo: [
+                { quote: "With great power comes great need to take a nap.", character: "Percy", context: "Percy Jackson" },
+                { quote: "If my life is going to mean anything, I have to live it myself.", character: "Percy", context: "The Lightning Thief" },
+                { quote: "Even strength must bow to wisdom sometimes.", character: "Annabeth", context: "Percy Jackson" },
+                { quote: "Families are messy. Immortal families are eternally messy.", character: "Chiron", context: "Percy Jackson" },
+                { quote: "Being a hero doesn't mean you're invincible.", character: "Annabeth", context: "The Last Olympian" }
+            ],
+            hg: [
+                { quote: "Hope is the only thing stronger than fear.", character: "President Snow", context: "The Hunger Games" },
+                { quote: "Fire is catching, and if we burn, you burn with us.", character: "Katniss", context: "Mockingjay" },
+                { quote: "I am not pretty. I am not beautiful. I am as radiant as the sun.", character: "Katniss", context: "The Hunger Games" },
+                { quote: "You don't forget the face of the person who was your last hope.", character: "Katniss", context: "The Hunger Games" },
+                { quote: "Only I keep wishing I could think of a way to show them they don't own me.", character: "Peeta", context: "The Hunger Games" }
+            ],
+            fw: [
+                { quote: "The real question is whether you'll survive long enough to become one of us.", character: "Xaden", context: "Fourth Wing" },
+                { quote: "Violence doesn't make you a monster. It's what you do with it.", character: "Violet", context: "Fourth Wing" },
+                { quote: "You're not going to die. I won't allow it.", character: "Tairn", context: "Fourth Wing" },
+                { quote: "There's a difference between surviving and living.", character: "Xaden", context: "Fourth Wing" },
+                { quote: "Dragons choose their riders. Not the other way around.", character: "Kaori", context: "Fourth Wing" }
+            ]
+        };
+
+        const characters = {
+            acotar: ["Rhysand", "Feyre", "Cassian", "Mor", "Azriel", "Nesta"],
+            tog: ["Aelin", "Rowan", "Dorian", "Chaol", "Lysandra", "Manon"],
+            hp: ["Dumbledore", "Snape", "Harry", "Hermione", "Ron", "McGonagall"],
+            pjo: ["Percy", "Annabeth", "Grover", "Chiron", "Luke", "Thalia"],
+            hg: ["Katniss", "Peeta", "Haymitch", "President Snow", "Gale", "Effie"],
+            fw: ["Violet", "Xaden", "Tairn", "Rhiannon", "Liam", "Kaori"]
+        };
+
+        function toggleSeries(series) {
+            const card = document.querySelector(`.series-${series}`);
+            
+            if (selectedSeries.has(series)) {
+                selectedSeries.delete(series);
+                card.classList.remove('selected');
+            } else {
+                selectedSeries.add(series);
+                card.classList.add('selected');
+            }
+
+            document.getElementById('start-btn').disabled = selectedSeries.size === 0;
+        }
+
+        function startGame() {
+            // Build quote pool from selected series
+            gameQuotes = [];
+            selectedSeries.forEach(series => {
+                gameQuotes = gameQuotes.concat(quotes[series]);
+            });
+
+            // Shuffle and take 10
+            gameQuotes = gameQuotes.sort(() => Math.random() - 0.5).slice(0, 10);
+
+            currentRound = 0;
+            score = 0;
+
+            document.getElementById('selection-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.remove('hidden');
+
+            loadRound();
+        }
+
+        function loadRound() {
+            answered = false;
+            const quote = gameQuotes[currentRound];
+            
+            document.getElementById('round').textContent = `${currentRound + 1} / 10`;
+            document.getElementById('score').textContent = score;
+            document.getElementById('quote-text').textContent = `"${quote.quote}"`;
+            document.getElementById('quote-context').textContent = `From: ${quote.context}`;
+
+            // Get characters for this quote's series
+            let seriesKey = Object.keys(quotes).find(key => 
+                quotes[key].some(q => q.quote === quote.quote)
+            );
+            
+            let characterOptions = [...characters[seriesKey]];
+            
+            // Ensure correct answer is included
+            if (!characterOptions.includes(quote.character)) {
+                characterOptions[0] = quote.character;
+            }
+            
+            // Shuffle and take 4
+            characterOptions = characterOptions.sort(() => Math.random() - 0.5).slice(0, 4);
+            
+            // Ensure correct answer is in the options
+            if (!characterOptions.includes(quote.character)) {
+                characterOptions[Math.floor(Math.random() * 4)] = quote.character;
+            }
+
+            const container = document.getElementById('characters-container');
+            container.innerHTML = '';
+
+            characterOptions.forEach(char => {
+                const btn = document.createElement('button');
+                btn.className = 'character-btn';
+                btn.textContent = char;
+                btn.onclick = () => selectCharacter(char, quote.character, btn);
+                container.appendChild(btn);
+            });
+        }
+
+        function selectCharacter(selected, correct, btn) {
+            if (answered) return;
+            answered = true;
+
+            const allBtns = document.querySelectorAll('.character-btn');
+            allBtns.forEach(b => b.style.pointerEvents = 'none');
+
+            if (selected === correct) {
+                btn.classList.add('correct');
+                score++;
+                document.getElementById('score').textContent = score;
+            } else {
+                btn.classList.add('incorrect');
+                // Show correct answer
+                allBtns.forEach(b => {
+                    if (b.textContent === correct) {
+                        b.classList.add('correct');
+                    }
+                });
+            }
+
+            setTimeout(() => {
+                currentRound++;
+                if (currentRound < 10) {
+                    loadRound();
+                } else {
+                    showResults();
+                }
+            }, 2000);
+        }
+
+        function showResults() {
+            document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+            document.getElementById('final-score').textContent = score;
+
+            let message = '';
+            if (score === 10) message = "Perfect! You're a true bookworm! 📚✨";
+            else if (score >= 7) message = "Excellent! You know your characters well! 🌟";
+            else if (score >= 5) message = "Good job! Time for a reread? 📖";
+            else message = "Keep reading! Practice makes perfect! 💪";
+
+            document.getElementById('result-message').textContent = message;
+        }
+
+        function restart() {
+            selectedSeries.clear();
+            document.querySelectorAll('.series-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('selection-screen').classList.remove('hidden');
+            document.getElementById('start-btn').disabled = true;
+        }
+    </script>
+</body>
+</html>
