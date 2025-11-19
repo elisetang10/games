@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACOTAR Court Sorting Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #5b21b6 0%, #7e22ce 50%, #4338ca 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            padding: 48px;
+            border: 2px solid #a855f7;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .sparkle-icon {
+            width: 80px;
+            height: 80px;
+            color: #c084fc;
+            margin: 0 auto 24px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: bold;
+            color: #d8b4fe;
+            margin-bottom: 16px;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: #d1d5db;
+            margin-bottom: 32px;
+        }
+
+        .courts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .court-card {
+            padding: 16px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .court-night { background: linear-gradient(135deg, #312e81 0%, #7e22ce 100%); }
+        .court-day { background: linear-gradient(135deg, #ca8a04 0%, #f97316 100%); }
+        .court-spring { background: linear-gradient(135deg, #059669 0%, #10b981 100%); }
+        .court-winter { background: linear-gradient(135deg, #3b82f6 0%, #22d3ee 100%); }
+        .court-autumn { background: linear-gradient(135deg, #c2410c 0%, #b91c1c 100%); }
+        .court-summer { background: linear-gradient(135deg, #14b8a6 0%, #3b82f6 100%); }
+
+        .btn {
+            background: linear-gradient(90deg, #9333ea 0%, #ec4899 100%);
+            color: white;
+            font-weight: bold;
+            padding: 16px 32px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background: linear-gradient(90deg, #7e22ce 0%, #db2777 100%);
+            transform: translateY(-2px);
+        }
+
+        .progress-container {
+            margin-bottom: 24px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .progress-text {
+            color: #d8b4fe;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: #334155;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #9333ea 0%, #ec4899 100%);
+            transition: width 0.3s ease;
+        }
+
+        .question-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 32px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .option {
+            padding: 24px;
+            border-radius: 8px;
+            border: 2px solid #334155;
+            background: #1e293b;
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-align: left;
+        }
+
+        .option:hover {
+            border-color: #a855f7;
+            background: #2d3748;
+            box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+        }
+
+        .option-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .option:hover .option-icon {
+            transform: scale(1.1);
+        }
+
+        .result-icon {
+            width: 128px;
+            height: 128px;
+            margin: 0 auto 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .result-title {
+            font-size: 48px;
+            font-weight: bold;
+            color: #d8b4fe;
+            margin-bottom: 16px;
+        }
+
+        .result-description {
+            font-size: 20px;
+            color: #d1d5db;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .traits {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 32px;
+        }
+
+        .trait {
+            padding: 12px 24px;
+            border-radius: 9999px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        svg {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        @media (max-width: 640px) {
+            h1 { font-size: 32px; }
+            .question-title { font-size: 24px; }
+            .result-title { font-size: 32px; }
+            .courts-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Start Screen -->
+        <div id="start-screen" class="text-center">
+            <svg class="sparkle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+            </svg>
+            <h1>Which ACOTAR Court Do You Belong To?</h1>
+            <p class="subtitle">Discover your true court among the lands of Prythian</p>
+            
+            <div class="courts-grid">
+                <div class="court-card court-night">
+                    <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                    </svg>
+                    <span>Night Court</span>
+                </div>
+                <div class="court-card court-day">
+                    <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                    <span>Day Court</span>
+                </div>
+                <div class="court-card court-spring">
+                    <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                    </svg>
+                    <span>Spring Court</span>
+                </div>
+                <div class="court-card court-winter">
+                    <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
+                    </svg>
+                    <span>Winter Court</span>
+                </div>
+                <div class="court-card court-autumn">
+                    <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"></path>
+                    </svg>
+                    <span>Autumn Court</span>
+                </div>
+                <div class="court-card court-summer">
+                    <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                    </svg>
+                    <span>Summer Court</span>
+                </div>
+            </div>
+
+            <button class="btn" onclick="startGame()">
+                Begin Your Journey
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Question Screen -->
+        <div id="question-screen" class="hidden">
+            <div class="progress-container">
+                <div class="progress-header">
+                    <span class="progress-text" id="progress-text">Question 1 of 6</span>
+                    <span class="progress-text" id="progress-percent">17%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
+
+            <h2 class="question-title text-center" id="question-text"></h2>
+
+            <div class="options" id="options-container"></div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-screen" class="hidden text-center">
+            <div class="result-icon" id="result-icon"></div>
+            <h2 class="result-title" id="result-court"></h2>
+            <p class="result-description" id="result-description"></p>
+            <div class="traits" id="result-traits"></div>
+            <button class="btn" onclick="restart()">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+                Take Again
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const courts = {
+            night: {
+                name: "Night Court",
+                color: "court-night",
+                gradient: "linear-gradient(135deg, #312e81 0%, #7e22ce 100%)",
+                icon: `<svg width="64" height="64" fill="none" stroke="white" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>`,
+                description: "You belong to the Night Court! You value loyalty, dreams, and inner strength. Like Rhysand and Feyre, you see beyond surface appearances.",
+                traits: ["Loyal", "Dreamers", "Strategic", "Protective"]
+            },
+            day: {
+                name: "Day Court",
+                color: "court-day",
+                gradient: "linear-gradient(135deg, #ca8a04 0%, #f97316 100%)",
+                icon: `<svg width="64" height="64" fill="none" stroke="white" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>`,
+                description: "You belong to the Day Court! You value knowledge, wisdom, and truth. Like Helion, you're charismatic and seek enlightenment.",
+                traits: ["Wise", "Scholarly", "Confident", "Truthful"]
+            },
+            spring: {
+                name: "Spring Court",
+                color: "court-spring",
+                gradient: "linear-gradient(135deg, #059669 0%, #10b981 100%)",
+                icon: `<svg width="64" height="64" fill="none" stroke="white" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>`,
+                description: "You belong to the Spring Court! You value growth, renewal, and beauty. You appreciate nature and second chances.",
+                traits: ["Nurturing", "Hopeful", "Artistic", "Resilient"]
+            },
+            winter: {
+                name: "Winter Court",
+                color: "court-winter",
+                gradient: "linear-gradient(135deg, #3b82f6 0%, #22d3ee 100%)",
+                icon: `<svg width="64" height="64" fill="none" stroke="white" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path></svg>`,
+                description: "You belong to the Winter Court! You value strength, endurance, and honor. Like Kallias and Viviane, you're steadfast and brave.",
+                traits: ["Strong", "Honorable", "Resilient", "Fierce"]
+            },
+            autumn: {
+                name: "Autumn Court",
+                color: "court-autumn",
+                gradient: "linear-gradient(135deg, #c2410c 0%, #b91c1c 100%)",
+                icon: `<svg width="64" height="64" fill="none" stroke="white" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"></path></svg>`,
+                description: "You belong to the Autumn Court! You value tradition, fire, and determination. You're passionate and unyielding.",
+                traits: ["Passionate", "Traditional", "Fierce", "Determined"]
+            },
+            summer: {
+                name: "Summer Court",
+                color: "court-summer",
+                gradient: "linear-gradient(135deg, #14b8a6 0%, #3b82f6 100%)",
+                icon: `<svg width="64" height="64" fill="none" stroke="white" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>`,
+                description: "You belong to the Summer Court! You value freedom, joy, and adventure. Like Tarquin, you're progressive and open-minded.",
+                traits: ["Free-spirited", "Joyful", "Progressive", "Adventurous"]
+            }
+        };
+
+        const questions = [
+            {
+                question: "What do you value most?",
+                options: [
+                    { text: "Loyalty and inner strength", court: "night", points: 3 },
+                    { text: "Knowledge and wisdom", court: "day", points: 3 },
+                    { text: "Growth and beauty", court: "spring", points: 3 },
+                    { text: "Honor and resilience", court: "winter", points: 3 },
+                    { text: "Tradition and passion", court: "autumn", points: 3 },
+                    { text: "Freedom and adventure", court: "summer", points: 3 }
+                ]
+            },
+            {
+                question: "How do you handle challenges?",
+                options: [
+                    { text: "With careful strategy", court: "night", points: 2 },
+                    { text: "By seeking knowledge", court: "day", points: 2 },
+                    { text: "With hope for renewal", court: "spring", points: 2 },
+                    { text: "Through sheer endurance", court: "winter", points: 2 },
+                    { text: "With fierce determination", court: "autumn", points: 2 },
+                    { text: "By embracing change", court: "summer", points: 2 }
+                ]
+            },
+            {
+                question: "What's your ideal setting?",
+                options: [
+                    { text: "A starlit mountain", court: "night", points: 2 },
+                    { text: "A grand library", court: "day", points: 2 },
+                    { text: "A blooming garden", court: "spring", points: 2 },
+                    { text: "A frozen palace", court: "winter", points: 2 },
+                    { text: "A crackling hearth", court: "autumn", points: 2 },
+                    { text: "A sun-drenched beach", court: "summer", points: 2 }
+                ]
+            },
+            {
+                question: "Which power would you want?",
+                options: [
+                    { text: "Darkness manipulation", court: "night", points: 3 },
+                    { text: "Light and spell-cleaving", court: "day", points: 3 },
+                    { text: "Nature magic", court: "spring", points: 3 },
+                    { text: "Ice manipulation", court: "winter", points: 3 },
+                    { text: "Fire wielding", court: "autumn", points: 3 },
+                    { text: "Water control", court: "summer", points: 3 }
+                ]
+            },
+            {
+                question: "What's your leadership style?",
+                options: [
+                    { text: "Lead from the shadows", court: "night", points: 2 },
+                    { text: "Lead with wisdom", court: "day", points: 2 },
+                    { text: "Lead with compassion", court: "spring", points: 2 },
+                    { text: "Lead with strength", court: "winter", points: 2 },
+                    { text: "Lead with tradition", court: "autumn", points: 2 },
+                    { text: "Lead with innovation", court: "summer", points: 2 }
+                ]
+            },
+            {
+                question: "What draws you to someone?",
+                options: [
+                    { text: "Their hidden depths", court: "night", points: 2 },
+                    { text: "Their intelligence", court: "day", points: 2 },
+                    { text: "Their kindness", court: "spring", points: 2 },
+                    { text: "Their loyalty", court: "winter", points: 2 },
+                    { text: "Their intensity", court: "autumn", points: 2 },
+                    { text: "Their spontaneity", court: "summer", points: 2 }
+                ]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let courtScores = {
+            night: 0,
+            day: 0,
+            spring: 0,
+            winter: 0,
+            autumn: 0,
+            summer: 0
+        };
+
+        function startGame() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('question-screen').classList.remove('hidden');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const question = questions[currentQuestion];
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+
+            document.getElementById('progress-text').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+            document.getElementById('progress-percent').textContent = `${Math.round(progress)}%`;
+            document.getElementById('progress-fill').style.width = `${progress}%`;
+            document.getElementById('question-text').textContent = question.question;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            question.options.forEach((option, index) => {
+                const court = courts[option.court];
+                const btn = document.createElement('button');
+                btn.className = 'option';
+                btn.innerHTML = `
+                    <div class="option-icon ${court.color}">
+                        ${court.icon.replace('64', '24')}
+                    </div>
+                    <span>${option.text}</span>
+                `;
+                btn.onclick = () => handleAnswer(option.court, option.points);
+                container.appendChild(btn);
+            });
+        }
+
+        function handleAnswer(court, points) {
+            courtScores[court] += points;
+
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            const highestCourt = Object.keys(courtScores).reduce((a, b) => 
+                courtScores[a] > courtScores[b] ? a : b
+            );
+            const result = courts[highestCourt];
+
+            document.getElementById('question-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+
+            const iconDiv = document.getElementById('result-icon');
+            iconDiv.style.background = result.gradient;
+            iconDiv.innerHTML = result.icon;
+
+            document.getElementById('result-court').textContent = result.name;
+            document.getElementById('result-description').textContent = result.description;
+
+            const traitsContainer = document.getElementById('result-traits');
+            traitsContainer.innerHTML = '';
+            result.traits.forEach(trait => {
+                const span = document.createElement('span');
+                span.className = `trait ${result.color}`;
+                span.textContent = trait;
+                traitsContainer.appendChild(span);
+            });
+        }
+
+        function restart() {
+            currentQuestion = 0;
+            courtScores = {
+                night: 0,
+                day: 0,
+                spring: 0,
+                winter: 0,
+                autumn: 0,
+                summer: 0
+            };
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('start-screen').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
