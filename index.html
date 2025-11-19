@@ -1,0 +1,278 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fantasy Book Activities</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #5b21b6 0%, #7e22ce 50%, #4338ca 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            color: white;
+        }
+
+        .header-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 24px;
+            color: #d8b4fe;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            font-size: 56px;
+            font-weight: bold;
+            color: #d8b4fe;
+            margin-bottom: 16px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            font-size: 24px;
+            color: #e9d5ff;
+            margin-bottom: 12px;
+        }
+
+        .description {
+            font-size: 18px;
+            color: #d1d5db;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 32px;
+            margin-bottom: 40px;
+        }
+
+        .activity-card {
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: 16px;
+            padding: 32px;
+            border: 2px solid #a855f7;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .activity-card:hover::before {
+            left: 100%;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border-color: #d8b4fe;
+        }
+
+        .card-icon {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+
+        .icon-acotar { background: linear-gradient(135deg, #312e81 0%, #7e22ce 100%); }
+        .icon-fourthwing { background: linear-gradient(135deg, #1e3a8a 0%, #581c87 100%); }
+        .icon-hungergames { background: linear-gradient(135deg, #374151 0%, #ef4444 100%); }
+        .icon-tog { background: linear-gradient(135deg, #78350f 0%, #7f1d1d 100%); }
+        .icon-togmate { background: linear-gradient(135deg, #b45309 0%, #dc2626 100%); }
+
+        .card-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #d8b4fe;
+            margin-bottom: 12px;
+        }
+
+        .card-type {
+            font-size: 14px;
+            color: #a855f7;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .card-description {
+            font-size: 16px;
+            color: #d1d5db;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            padding: 6px 12px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 600;
+            background: rgba(168, 85, 247, 0.2);
+            color: #d8b4fe;
+            border: 1px solid #a855f7;
+        }
+
+        .footer {
+            text-align: center;
+            padding-top: 40px;
+            color: #d1d5db;
+            font-size: 14px;
+        }
+
+        .footer a {
+            color: #d8b4fe;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        svg {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 40px; }
+            .subtitle { font-size: 20px; }
+            .activities-grid { grid-template-columns: 1fr; gap: 24px; }
+            .activity-card { padding: 24px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <svg class="header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+            </svg>
+            <h1>Fantasy Book Activities</h1>
+            <p class="subtitle">Interactive Quizzes & Games</p>
+            <p class="description">Explore your favorite fantasy worlds through engaging quizzes, personality tests, and interactive adventures. Which court do you belong to? Can you survive the arena? Find out now!</p>
+        </div>
+
+        <div class="activities-grid">
+            <!-- ACOTAR Court Sorting -->
+            <a href="acotar_court.html" class="activity-card">
+                <div class="card-icon icon-acotar">✨</div>
+                <div class="card-type">Personality Quiz</div>
+                <h2 class="card-title">ACOTAR Court Sorting</h2>
+                <p class="card-description">Discover which court of Prythian you truly belong to. Will you join the Night Court's dreamers or the Day Court's scholars?</p>
+                <div class="card-tags">
+                    <span class="tag">6 Questions</span>
+                    <span class="tag">Sarah J. Maas</span>
+                    <span class="tag">Personality</span>
+                </div>
+            </a>
+
+            <!-- Fourth Wing Quiz -->
+            <a href="fourthwing.html" class="activity-card">
+                <div class="card-icon icon-fourthwing">🐉</div>
+                <div class="card-type">Knowledge Quiz</div>
+                <h2 class="card-title">Fourth Wing Quiz</h2>
+                <p class="card-description">Test your knowledge of Basgiath War College and prove you're worthy of bonding with a dragon. Can you achieve a perfect score?</p>
+                <div class="card-tags">
+                    <span class="tag">10 Questions</span>
+                    <span class="tag">Rebecca Yarros</span>
+                    <span class="tag">Trivia</span>
+                </div>
+            </a>
+
+            <!-- Hunger Games Survival -->
+            <a href="hungergames.html" class="activity-card">
+                <div class="card-icon icon-hungergames">🔥</div>
+                <div class="card-type">Interactive Story</div>
+                <h2 class="card-title">Survive the Hunger Games</h2>
+                <p class="card-description">Make strategic choices to survive the arena as a tribute from District 12. Manage your health, hunger, and resources wisely.</p>
+                <div class="card-tags">
+                    <span class="tag">Multiple Endings</span>
+                    <span class="tag">Suzanne Collins</span>
+                    <span class="tag">Adventure</span>
+                </div>
+            </a>
+
+            <!-- Throne of Glass Quiz -->
+            <a href="throneofglass.html" class="activity-card">
+                <div class="card-icon icon-tog">⚔️</div>
+                <div class="card-type">Knowledge Quiz</div>
+                <h2 class="card-title">Throne of Glass Quiz</h2>
+                <p class="card-description">Journey through Erilea and test your knowledge of Aelin's epic story. How well do you know the Throne of Glass series?</p>
+                <div class="card-tags">
+                    <span class="tag">10 Questions</span>
+                    <span class="tag">Sarah J. Maas</span>
+                    <span class="tag">Trivia</span>
+                </div>
+            </a>
+
+            <!-- TOG Mate Quiz -->
+            <a href="tog_mate.html" class="activity-card">
+                <div class="card-icon icon-togmate">👑</div>
+                <div class="card-type">Personality Quiz</div>
+                <h2 class="card-title">Your Throne of Glass Mate</h2>
+                <p class="card-description">Find out which character from Throne of Glass is your perfect match. Rowan? Dorian? Aedion? Discover your destined mate!</p>
+                <div class="card-tags">
+                    <span class="tag">8 Questions</span>
+                    <span class="tag">Sarah J. Maas</span>
+                    <span class="tag">Romance</span>
+                </div>
+            </a>
+        </div>
+
+        <div class="footer">
+            <p>Made with ✨ for fantasy book lovers everywhere</p>
+        </div>
+    </div>
+</body>
+</html>
