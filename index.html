@@ -121,7 +121,11 @@
         .icon-hungergames { background: linear-gradient(135deg, #374151 0%, #ef4444 100%); }
         .icon-tog { background: linear-gradient(135deg, #78350f 0%, #7f1d1d 100%); }
         .icon-togmate { background: linear-gradient(135deg, #b45309 0%, #dc2626 100%); }
-        .icon-bookquote { background: linear-gradient(135deg, #4c1d95 0%, #a855f7 100%); }
+
+        /* 🔥 NEW ICON STYLE — REQUIRED FOR THE NEW CARD */
+        .icon-bookquote { 
+            background: linear-gradient(135deg, #4c1d95 0%, #a855f7 100%); 
+        }
 
         .card-title {
             font-size: 28px;
@@ -179,11 +183,6 @@
             text-decoration: underline;
         }
 
-        svg {
-            display: inline-block;
-            vertical-align: middle;
-        }
-
         @media (max-width: 768px) {
             h1 { font-size: 40px; }
             .subtitle { font-size: 20px; }
@@ -200,11 +199,14 @@
             </svg>
             <h1>Fantasy Book Activities</h1>
             <p class="subtitle">Interactive Quizzes & Games</p>
-            <p class="description">Explore your favorite fantasy worlds through engaging quizzes, personality tests, and interactive adventures. Which court do you belong to? Can you survive the arena? Find out now!</p>
+            <p class="description">
+                Explore your favorite fantasy worlds through engaging quizzes, personality tests, and interactive adventures.
+                Which court do you belong to? Can you survive the arena? Find out now!
+            </p>
         </div>
 
         <div class="activities-grid">
-            <!-- ACOTAR Court Sorting -->
+
             <a href="acotar_court.html" class="activity-card">
                 <div class="card-icon icon-acotar">✨</div>
                 <div class="card-type">Personality Quiz</div>
@@ -217,12 +219,11 @@
                 </div>
             </a>
 
-            <!-- Fourth Wing Quiz -->
             <a href="fourthwing.html" class="activity-card">
                 <div class="card-icon icon-fourthwing">🐉</div>
                 <div class="card-type">Knowledge Quiz</div>
                 <h2 class="card-title">Fourth Wing Quiz</h2>
-                <p class="card-description">Test your knowledge of Basgiath War College and prove you're worthy of bonding with a dragon. Can you achieve a perfect score?</p>
+                <p class="card-description">Test your knowledge of Basgiath War College and prove you're worthy of bonding with a dragon.</p>
                 <div class="card-tags">
                     <span class="tag">10 Questions</span>
                     <span class="tag">Rebecca Yarros</span>
@@ -230,12 +231,11 @@
                 </div>
             </a>
 
-            <!-- Hunger Games Survival -->
             <a href="hungergames.html" class="activity-card">
                 <div class="card-icon icon-hungergames">🔥</div>
                 <div class="card-type">Interactive Story</div>
                 <h2 class="card-title">Survive the Hunger Games</h2>
-                <p class="card-description">Make strategic choices to survive the arena as a tribute from District 12. Manage your health, hunger, and resources wisely.</p>
+                <p class="card-description">Make strategic choices to survive the arena as a tribute from District 12.</p>
                 <div class="card-tags">
                     <span class="tag">Multiple Endings</span>
                     <span class="tag">Suzanne Collins</span>
@@ -243,12 +243,11 @@
                 </div>
             </a>
 
-            <!-- Throne of Glass Quiz -->
             <a href="throneofglass.html" class="activity-card">
                 <div class="card-icon icon-tog">⚔️</div>
                 <div class="card-type">Knowledge Quiz</div>
                 <h2 class="card-title">Throne of Glass Quiz</h2>
-                <p class="card-description">Journey through Erilea and test your knowledge of Aelin's epic story. How well do you know the Throne of Glass series?</p>
+                <p class="card-description">Test your knowledge of Aelin's story. How well do you know the Throne of Glass series?</p>
                 <div class="card-tags">
                     <span class="tag">10 Questions</span>
                     <span class="tag">Sarah J. Maas</span>
@@ -256,12 +255,11 @@
                 </div>
             </a>
 
-            <!-- TOG Mate Quiz -->
             <a href="tog_mate.html" class="activity-card">
                 <div class="card-icon icon-togmate">👑</div>
                 <div class="card-type">Personality Quiz</div>
                 <h2 class="card-title">Your Throne of Glass Mate</h2>
-                <p class="card-description">Find out which character from Throne of Glass is your perfect match. Rowan? Dorian? Aedion? Discover your destined mate!</p>
+                <p class="card-description">Find out which character from Throne of Glass is your perfect match.</p>
                 <div class="card-tags">
                     <span class="tag">8 Questions</span>
                     <span class="tag">Sarah J. Maas</span>
@@ -269,18 +267,19 @@
                 </div>
             </a>
 
-            <!-- Book Quote Matching Quiz -->
+            <!-- NEW BOOK-QUOTE MATCHING QUIZ -->
             <a href="bookquote_match.html" class="activity-card">
                 <div class="card-icon icon-bookquote">💗</div>
                 <div class="card-type">Knowledge Quiz</div>
                 <h2 class="card-title">Match Quotes to Characters</h2>
-                <p class="card-description">Select the book series you want to play with</p>
+                <p class="card-description">Select the book series you want to play with.</p>
                 <div class="card-tags">
                     <span class="tag">10 Questions</span>
                     <span class="tag">Multiple Authors</span>
                     <span class="tag">Trivia</span>
                 </div>
             </a>
+
         </div>
 
         <div class="footer">
