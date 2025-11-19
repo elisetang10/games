@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survive the Hunger Games</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1f2937 0%, #374151 50%, #1f2937 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(17, 24, 39, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+            padding: 48px;
+            border: 3px solid #ef4444;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .flame-icon {
+            width: 100px;
+            height: 100px;
+            color: #f59e0b;
+            margin: 0 auto 24px;
+            animation: flicker 2s ease-in-out infinite;
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: bold;
+            color: #ef4444;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: #d1d5db;
+            margin-bottom: 16px;
+            font-style: italic;
+        }
+
+        .warning {
+            font-size: 16px;
+            color: #fbbf24;
+            margin-bottom: 32px;
+            font-weight: 600;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #9ca3af;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #10b981;
+        }
+
+        .stat-value.danger {
+            color: #ef4444;
+        }
+
+        .stat-value.warning {
+            color: #f59e0b;
+        }
+
+        .story-text {
+            font-size: 18px;
+            color: #e5e7eb;
+            line-height: 1.8;
+            margin-bottom: 32px;
+            padding: 24px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            border-left: 4px solid #ef4444;
+        }
+
+        .choices {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .choice {
+            padding: 20px 24px;
+            border-radius: 8px;
+            border: 2px solid #374151;
+            background: #1f2937;
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .choice:hover {
+            border-color: #ef4444;
+            background: #374151;
+            transform: translateX(8px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+        }
+
+        .choice::before {
+            content: '→';
+            position: absolute;
+            right: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .choice:hover::before {
+            opacity: 1;
+        }
+
+        .btn {
+            background: linear-gradient(90deg, #dc2626 0%, #991b1b 100%);
+            color: white;
+            font-weight: bold;
+            padding: 16px 32px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            background: linear-gradient(90deg, #991b1b 0%, #7f1d1d 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(220, 38, 38, 0.4);
+        }
+
+        .outcome-box {
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .outcome-success {
+            background: rgba(16, 185, 129, 0.2);
+            border: 2px solid #10b981;
+            color: #6ee7b7;
+        }
+
+        .outcome-danger {
+            background: rgba(239, 68, 68, 0.2);
+            border: 2px solid #ef4444;
+            color: #fca5a5;
+        }
+
+        .outcome-neutral {
+            background: rgba(251, 191, 36, 0.2);
+            border: 2px solid #fbbf24;
+            color: #fcd34d;
+        }
+
+        .victory {
+            background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+            padding: 40px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .defeat {
+            background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);
+            padding: 40px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .result-title {
+            font-size: 42px;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
+        .result-text {
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 24px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        svg {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        @media (max-width: 640px) {
+            h1 { font-size: 32px; }
+            .container { padding: 32px 24px; }
+            .stats-container { grid-template-columns: 1fr; }
+            .story-text { font-size: 16px; }
+            .choice { font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Start Screen -->
+        <div id="start-screen" class="text-center">
+            <svg class="flame-icon" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C12 2 7 6 7 12C7 15.31 9.69 18 13 18C16.31 18 19 15.31 19 12C19 6 14 2 14 2C14 2 15 6 12 9C9 6 12 2 12 2Z" stroke="currentColor" stroke-width="1"/>
+            </svg>
+            <h1>Survive the Hunger Games</h1>
+            <p class="subtitle">"May the odds be ever in your favor"</p>
+            <p class="warning">⚠️ Your choices matter. Make wise decisions to survive.</p>
+
+            <div style="text-align: left; max-width: 600px; margin: 32px auto;">
+                <h3 style="color: #f59e0b; margin-bottom: 16px; font-size: 20px;">How to Play:</h3>
+                <ul style="color: #d1d5db; font-size: 16px; line-height: 2; list-style-position: inside;">
+                    <li>You've been chosen as a tribute from District 12</li>
+                    <li>Monitor your Health, Hunger, and Resources</li>
+                    <li>Make strategic choices to survive</li>
+                    <li>Bad decisions can be fatal</li>
+                    <li>Reach the end to become the victor</li>
+                </ul>
+            </div>
+
+            <button class="btn" onclick="startGame()">
+                Enter the Arena
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="hidden">
+            <div class="stats-container">
+                <div class="stat">
+                    <div class="stat-label">❤️ Health</div>
+                    <div class="stat-value" id="health">100</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">🍖 Hunger</div>
+                    <div class="stat-value" id="hunger">100</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">🎒 Resources</div>
+                    <div class="stat-value" id="resources">0</div>
+                </div>
+            </div>
+
+            <div id="outcome-message"></div>
+
+            <div class="story-text" id="story-text"></div>
+
+            <div class="choices" id="choices-container"></div>
+        </div>
+
+        <!-- End Screen -->
+        <div id="end-screen" class="hidden text-center">
+            <div id="end-result"></div>
+            <button class="btn" onclick="restart()">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+                Play Again
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let gameState = {
+            health: 100,
+            hunger: 100,
+            resources: 0,
+            currentScene: 0
+        };
+
+        const scenes = [
+            {
+                story: "The countdown begins. You stand on your platform, heart racing. The Cornucopia glitters in the center, filled with supplies. Around you, 23 other tributes prepare for the bloodbath. What's your strategy?",
+                choices: [
+                    { 
+                        text: "Rush to the Cornucopia for supplies", 
+                        nextScene: 1,
+                        outcome: { health: -30, resources: 3, message: "You grab a backpack and knife, but take a spear wound in the chaos. 6 tributes fall in the initial bloodbath.", type: "danger" }
+                    },
+                    { 
+                        text: "Run into the forest immediately", 
+                        nextScene: 1,
+                        outcome: { resources: 0, message: "You escape safely but have no supplies. You hear cannons firing as tributes die behind you.", type: "success" }
+                    },
+                    { 
+                        text: "Grab only what's on the outskirts and flee", 
+                        nextScene: 1,
+                        outcome: { resources: 1, message: "You snatch a water bottle and rope before disappearing into the woods. Smart choice.", type: "neutral" }
+                    }
+                ]
+            },
+            {
+                story: "Night falls on your first day. You're alone in the forest, exhausted. You hear rustling nearby - could be an animal, or another tribute. You're hungry and thirsty.",
+                choices: [
+                    { 
+                        text: "Investigate the sound", 
+                        nextScene: 2,
+                        outcome: { health: -20, resources: 2, message: "It's a wounded tribute from District 9. They attack! You defend yourself and take their supplies, but you're injured.", type: "danger" }
+                    },
+                    { 
+                        text: "Hide and stay silent", 
+                        nextScene: 2,
+                        outcome: { hunger: -15, message: "You stay hidden all night. Safe, but growing hungrier. A cannon fires in the distance.", type: "neutral" }
+                    },
+                    { 
+                        text: "Climb a tree to sleep", 
+                        nextScene: 2,
+                        outcome: { hunger: -10, message: "You remember Rue's strategy. You tie yourself in and rest safely above ground.", type: "success" }
+                    }
+                ]
+            },
+            {
+                story: "Day 2. You desperately need food and water. You spot a stream, but you also see smoke rising in the distance - possibly the Career pack's camp. Your hunger is becoming dangerous.",
+                choices: [
+                    { 
+                        text: "Go to the stream for water", 
+                        nextScene: 3,
+                        outcome: { hunger: 20, message: "Clean water! You drink and fill your bottle. You also catch a fish. Your strength returns.", type: "success" }
+                    },
+                    { 
+                        text: "Investigate the smoke", 
+                        nextScene: 3,
+                        outcome: { health: -40, resources: 4, message: "You spy on the Careers and steal supplies when they leave, but one returns early and wounds you badly before you escape.", type: "danger" }
+                    },
+                    { 
+                        text: "Search for edible plants", 
+                        nextScene: 3,
+                        outcome: { hunger: 10, resources: 1, message: "You remember your training. You find berries you can identify and some edible roots.", type: "neutral" }
+                    }
+                ]
+            },
+            {
+                story: "Day 4. Only 12 tributes remain. You hear fighting nearby and a parachute lands near you - a sponsor gift! But approaching it means leaving cover. The fighting sounds close.",
+                choices: [
+                    { 
+                        text: "Risk grabbing the parachute", 
+                        nextScene: 4,
+                        outcome: { health: 30, hunger: 20, message: "Medicine and food from a sponsor! Your wounds heal significantly. Someone was watching out for you.", type: "success" }
+                    },
+                    { 
+                        text: "Investigate the fighting", 
+                        nextScene: 4,
+                        outcome: { health: -25, resources: 3, message: "You find two tributes fighting and wait for the winner to leave, then scavenge their supplies. But you're spotted and take an arrow to the shoulder.", type: "danger" }
+                    },
+                    { 
+                        text: "Move away from the noise", 
+                        nextScene: 4,
+                        outcome: { hunger: -20, message: "You travel for hours. Safe, but no food or supplies. Two cannons boom - down to 10 tributes.", type: "neutral" }
+                    }
+                ]
+            },
+            {
+                story: "Day 6. Final 6 tributes. A severe thunderstorm hits. You could use this as cover to move, or wait it out. The Gamemakers are getting impatient - they'll force you together soon.",
+                choices: [
+                    { 
+                        text: "Move during the storm", 
+                        nextScene: 5,
+                        outcome: { health: -15, resources: 2, message: "Lightning strikes a tree nearby, nearly hitting you. But you find an abandoned camp with supplies.", type: "neutral" }
+                    },
+                    { 
+                        text: "Hunt during the storm", 
+                        nextScene: 5,
+                        outcome: { hunger: 25, message: "Animals are seeking shelter too. You manage to trap a rabbit. A good meal boosts your strength.", type: "success" }
+                    },
+                    { 
+                        text: "Wait out the storm in a cave", 
+                        nextScene: 5,
+                        outcome: { health: -30, message: "The cave has tracker jackers! You're stung multiple times before escaping into the rain, hallucinating.", type: "danger" }
+                    }
+                ]
+            },
+            {
+                story: "Final 3. The Gamemakers drain the arena, forcing you toward the Cornucopia. The two remaining tributes are the Career from District 1 and a young girl from District 11. This is it.",
+                choices: [
+                    { 
+                        text: "Form an alliance with District 11", 
+                        nextScene: 6,
+                        outcome: { health: -20, message: "Together you ambush the Career. They're eliminated, but your ally is mortally wounded. She makes you promise to win. It's just you now.", type: "neutral" }
+                    },
+                    { 
+                        text: "Set a trap at the Cornucopia", 
+                        nextScene: 6,
+                        outcome: { health: -25, resources: -2, message: "Your trap works! The Career falls into it. But the District 11 girl attacks while you're vulnerable. You manage to defend yourself.", type: "danger" }
+                    },
+                    { 
+                        text: "Use the high ground", 
+                        nextScene: 6,
+                        outcome: { health: -10, message: "You climb and use your bow. The Career and District 11 girl fight each other. You wait for your moment and strike.", type: "success" }
+                    }
+                ]
+            }
+        ];
+
+        function startGame() {
+            gameState = {
+                health: 100,
+                hunger: 100,
+                resources: 0,
+                currentScene: 0
+            };
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.remove('hidden');
+            loadScene();
+        }
+
+        function loadScene() {
+            const scene = scenes[gameState.currentScene];
+            document.getElementById('story-text').textContent = scene.story;
+            document.getElementById('outcome-message').innerHTML = '';
+            
+            updateStats();
+
+            const container = document.getElementById('choices-container');
+            container.innerHTML = '';
+
+            scene.choices.forEach((choice) => {
+                const btn = document.createElement('button');
+                btn.className = 'choice';
+                btn.textContent = choice.text;
+                btn.onclick = () => makeChoice(choice);
+                container.appendChild(btn);
+            });
+        }
+
+        function makeChoice(choice) {
+            // Apply outcome
+            const outcome = choice.outcome;
+            if (outcome.health) gameState.health += outcome.health;
+            if (outcome.hunger) gameState.hunger += outcome.hunger;
+            if (outcome.resources) gameState.resources += outcome.resources;
+
+            // Keep stats in bounds
+            gameState.health = Math.max(0, Math.min(100, gameState.health));
+            gameState.hunger = Math.max(0, Math.min(100, gameState.hunger));
+            gameState.resources = Math.max(0, gameState.resources);
+
+            // Show outcome message
+            if (outcome.message) {
+                const outcomeDiv = document.createElement('div');
+                outcomeDiv.className = `outcome-box outcome-${outcome.type}`;
+                outcomeDiv.textContent = outcome.message;
+                document.getElementById('outcome-message').innerHTML = '';
+                document.getElementById('outcome-message').appendChild(outcomeDiv);
+            }
+
+            updateStats();
+
+            // Check for death
+            if (gameState.health <= 0) {
+                endGame(false, "Your wounds were too severe. Your cannon fires. District 12 mourns another fallen tribute.");
+                return;
+            }
+            if (gameState.hunger <= 0) {
+                endGame(false, "Starvation claims you. You collapse, too weak to continue. Another name for the fallen.");
+                return;
+            }
+
+            // Move to next scene
+            gameState.currentScene = choice.nextScene;
+            
+            if (gameState.currentScene >= scenes.length) {
+                endGame(true, "The final cannon fires. Silence. Then, Claudius Templesmith's voice booms across the arena: 'Ladies and gentlemen, the Victor of the 74th Hunger Games!' You've done what seemed impossible. You survived.");
+                return;
+            }
+
+            loadScene();
+        }
+
+        function updateStats() {
+            const healthEl = document.getElementById('health');
+            const hungerEl = document.getElementById('hunger');
+            const resourcesEl = document.getElementById('resources');
+
+            healthEl.textContent = gameState.health;
+            hungerEl.textContent = gameState.hunger;
+            resourcesEl.textContent = gameState.resources;
+
+            // Update colors based on values
+            healthEl.className = 'stat-value';
+            if (gameState.health <= 30) healthEl.classList.add('danger');
+            else if (gameState.health <= 50) healthEl.classList.add('warning');
+
+            hungerEl.className = 'stat-value';
+            if (gameState.hunger <= 30) hungerEl.classList.add('danger');
+            else if (gameState.hunger <= 50) hungerEl.classList.add('warning');
+
+            resourcesEl.className = 'stat-value';
+        }
+
+        function endGame(victory, message) {
+            document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('end-screen').classList.remove('hidden');
+
+            const resultDiv = document.getElementById('end-result');
+            
+            if (victory) {
+                resultDiv.innerHTML = `
+                    <div class="victory">
+                        <div class="result-title" style="color: #6ee7b7;">🏆 VICTORY 🏆</div>
+                        <div class="result-text" style="color: #d1fae5;">${message}</div>
+                        <div style="color: #a7f3d0; font-size: 16px; margin-top: 16px;">
+                            Final Stats: ❤️ ${gameState.health} | 🍖 ${gameState.hunger} | 🎒 ${gameState.resources}
+                        </div>
+                    </div>
+                `;
+            } else {
+                resultDiv.innerHTML = `
+                    <div class="defeat">
+                        <div class="result-title" style="color: #fca5a5;">💀 GAME OVER 💀</div>
+                        <div class="result-text" style="color: #fecaca;">${message}</div>
+                        <div style="color: #fca5a5; font-size: 16px; margin-top: 16px;">
+                            You survived ${gameState.currentScene + 1} days in the arena.
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function restart() {
+            document.getElementById('end-screen').classList.add('hidden');
+            document.getElementById('start-screen').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
